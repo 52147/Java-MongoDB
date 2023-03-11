@@ -196,9 +196,9 @@ db1> db.test2.find()
   - 1. insert "mdate: yyyy-MM-DD" as "date" data type in mongodb
   - 2. find the mdate(Date type) that is between xxxx and xxxx
 - Notice:
-  - 0. if we directly insert json file into mongodb, we will only get integer and string type data. so if we need the Date data type,we first need to convert the string date.
-  - 1.  LocalDate(include time zone) is different from Date, and Mongodb can only use Date type
-  - 2.
+  - 1. if we directly insert json file into mongodb, we will only get integer and string type data. so if we need the Date data type,we first need to convert the string date.
+  - 2.  LocalDate(include time zone) is different from Date, and Mongodb can only use Date type
+  - 3.
     - If we want to insert the new document, first we need to drop the whole collection.
     - Otherwise, we will get the duplicate key error.
 ```Java
