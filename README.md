@@ -186,6 +186,43 @@ db1> db.test2.find()
 - https://www.mongodb.com/docs/drivers/java/sync/current/fundamentals/aggregation/#basic-aggregation-example
 ## 3. Get the output
 
+
+## Issue: Java variable type
+
+- Problem:
+  - 1. insert "mdate: yyyy-MM-DD" as string in mogodb
+  - 2. can not use string to find the date range because this "mdate" Date type is not date type, is string type
+- Solve:
+  - 1. insert "mdate: yyyy-MM-DD" as "date" data type in mongodb
+  - 2. find the mdate(Date type) that is between xxxx and xxxx
+- Notice:
+  - 0. if we directly insert json file into mongodb, we will only get integer and string type data. so if we need the Date data type,we first need to convert the string date.
+  - 1.  LocalDate(include time zone) is different from Date, and Mongodb can only use Date type
+  - 2.
+    - If we want to insert the new document, first we need to drop the whole collection.
+    - Otherwise, we will get the duplicate key error.
+```Java
+		// Query : find the column that date range is between 2012.01.02 and 2015.02.20
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd");
+
+		String date = "2012.01.02";
+		String date1 = "2015.02.20";
+		Date startDate = simpleDateFormat.parse(date);
+		Date endDate = simpleDateFormat.parse(date1);
+		BasicDBObject query = new BasicDBObject("mdate_", new BasicDBObject("$gte", startDate).append("$lt", endDate));
+
+		DBCollection collection2 = mongoClient.getDB("db1").getCollection("test7");
+
+		DBCursor cursor = collection2.find(query);
+
+		try {
+			while (cursor.hasNext()) {
+				System.out.println(cursor.next());
+			}
+		} finally {
+			cursor.close();
+		}
+```
 ## Challenge part
 I try to import the json file in mongoDB through Java, not working.
 Got this error: 
